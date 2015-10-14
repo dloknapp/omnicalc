@@ -11,13 +11,20 @@ class CalculationsController < ApplicationController
     # ================================================================================
 
 
-    @character_count_with_spaces = "Replace this string with your answer."
+    @character_count_with_spaces = @text.length
 
-    @character_count_without_spaces = "Replace this string with your answer."
+    @character_count_without_spaces = @text.gsub(" ", "").length
 
-    @word_count = "Replace this string with your answer."
+    a = @text.split
+    @word_count = a.length
 
-    @occurrences = "Replace this string with your answer."
+    a_downcase = []
+    a.each do |string|
+        cleaned = string.gsub(/[^0-9A-Za-z]/, '')
+        a_downcase.push(cleaned.downcase)
+    end
+
+    @occurrences = a_downcase.count(@special_word)
 
     # ================================================================================
     # Your code goes above.
@@ -37,8 +44,12 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
+    rate = @apr / 12
+    nper = @years * 12
 
-    @monthly_payment = "Replace this string with your answer."
+    pmt = (rate * @principal * (( 1 + rate) ** nper)) / ((1 + rate) ** nper - 1)
+
+    @monthly_payment = pmt
 
     # ================================================================================
     # Your code goes above.
@@ -60,12 +71,12 @@ class CalculationsController < ApplicationController
     #   number of seconds as a result.
     # ================================================================================
 
-    @seconds = "Replace this string with your answer."
-    @minutes = "Replace this string with your answer."
-    @hours = "Replace this string with your answer."
-    @days = "Replace this string with your answer."
-    @weeks = "Replace this string with your answer."
-    @years = "Replace this string with your answer."
+    @seconds = @ending - @starting
+    @minutes = @seconds / 60
+    @hours = @minutes / 60
+    @days = @hours / 24
+    @weeks = @days / 7
+    @years = @days / 365.25
 
     # ================================================================================
     # Your code goes above.
@@ -82,27 +93,48 @@ class CalculationsController < ApplicationController
     # The numbers the user input are in the array @numbers.
     # ================================================================================
 
-    @sorted_numbers = "Replace this string with your answer."
+    @sorted_numbers = @numbers.sort
 
-    @count = "Replace this string with your answer."
+    @count = @numbers.length
 
-    @minimum = "Replace this string with your answer."
+    @minimum = @numbers.min
 
-    @maximum = "Replace this string with your answer."
+    @maximum = @numbers.max
 
-    @range = "Replace this string with your answer."
+    @range = @maximum - @minimum
 
-    @median = "Replace this string with your answer."
+    midpoint = @count / 2
+    med = 0
+    if @count % 2 == 1
+        med = @sorted_numbers[midpoint]
+    else
+        med = (@sorted_numbers[midpoint] + @sorted_numbers[midpoint - 1])/2
+    end
 
-    @sum = "Replace this string with your answer."
+    @median = med
 
-    @mean = "Replace this string with your answer."
+    @sum = @numbers.sum
 
-    @variance = "Replace this string with your answer."
+    @mean = @sum / @count
 
-    @standard_deviation = "Replace this string with your answer."
+    squared_differences = []
+    @sorted_numbers.each do |number|
+        diff = @mean - number
+        diff_squared = diff ** 2
+        squared_differences.push diff_squared
+    end
 
-    @mode = "Replace this string with your answer."
+    @variance = squared_differences.sum / squared_differences.length
+
+    @standard_deviation = @variance ** 0.5
+
+    occurrences = []
+    @numbers.each do |number|
+        occurrences.push @numbers.count(number)
+    end
+
+    index = occurrences.index(occurrences.max)
+    @mode = @numbers[index]
 
     # ================================================================================
     # Your code goes above.
