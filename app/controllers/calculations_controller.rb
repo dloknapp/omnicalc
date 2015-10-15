@@ -44,7 +44,7 @@ class CalculationsController < ApplicationController
     # The number of years the user input is in the integer @years.
     # The principal value the user input is in the decimal @principal.
     # ================================================================================
-    rate = @apr / 12
+    rate = @apr / 100/ 12
     nper = @years * 12
 
     pmt = (rate * @principal * (( 1 + rate) ** nper)) / ((1 + rate) ** nper - 1)
@@ -128,11 +128,13 @@ class CalculationsController < ApplicationController
 
     @standard_deviation = @variance ** 0.5
 
+    # created array to hold the count of each element
     occurrences = []
     @numbers.each do |number|
         occurrences.push @numbers.count(number)
     end
 
+    # find the index of the max number and return it
     index = occurrences.index(occurrences.max)
     @mode = @numbers[index]
 
